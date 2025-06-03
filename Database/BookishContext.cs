@@ -1,8 +1,7 @@
 using Bookish.Models;
 using Microsoft.EntityFrameworkCore;
 
-
-namespace Bookish
+namespace Bookish.Database
 {
     public class BookishContext : DbContext
     {
@@ -10,9 +9,11 @@ namespace Bookish
         public DbSet<Books> Books { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        { 
+        {
             // This is the configuration used for connecting to the database
-            optionsBuilder.UseNpgsql(@"Server=localhost;Port=5432;Database=bookish;User Id=bookish;Password=bookish;");
+            optionsBuilder.UseNpgsql(
+                @"Server=localhost;Port=5432;Database=bookish;User Id=bookish;Password=bookish;"
+            );
         }
     }
 }
