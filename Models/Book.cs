@@ -1,3 +1,6 @@
+using Bookish.Database;
+using Microsoft.EntityFrameworkCore;
+
 public class Book
 {
     public int Id { get; set; }
