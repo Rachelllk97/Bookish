@@ -1,8 +1,20 @@
+@Queries List<Book> Titles
+
 @{
     ViewData["Title"] = "Books";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>Your books will be displayed here</p>
+
+
+<ul>
+ @foreach (var item in Model)
+ {
+    <li>@item</li>
+
+    }
+</ul>
+
 
 

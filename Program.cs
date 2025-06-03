@@ -18,8 +18,8 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 
-var context = new Query();
-context.TestQuery();
+// var context = new Query();
+// context.TestQuery();
 
 
 app.UseAuthorization();

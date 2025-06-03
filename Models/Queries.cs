@@ -10,19 +10,14 @@ public class Query
     {
         var context = new BookishContext();
         //dependancy injection^^
-        var Results = context.Books.Where(s => s.Title == GetName()).ToList();
-        foreach (Book result in Results)
-        {
-            Console.WriteLine(result.Title);
-            Console.WriteLine(result.Author);
-            Console.WriteLine($"There are {result.Stock} copies in total");
-            Console.WriteLine($"There are {result.Available} copies available to borrow");
-        }
-        return Results;
-    }
-
-    public static string GetName()
-    {
-        return "Moby Dick";
+        var Titles = context.Books.ToList();
+        // foreach (Book result in Titles)
+        // {
+        //     Console.WriteLine(result.Title);
+        //     Console.WriteLine(result.Author);
+        //     Console.WriteLine($"There are {result.Stock} copies in total");
+        //     Console.WriteLine($"There are {result.Available} copies available to borrow");
+        // }
+        return List<Book> Titles;
     }
 }

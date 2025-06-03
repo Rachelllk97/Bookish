@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Bookish.Models;
+using Bookish.Database;
 
 namespace Bookish.Controllers;
 
@@ -25,7 +26,9 @@ public class HomeController : Controller
 
     public IActionResult Books()
     {
-        return View();
+        var context = new Query();
+        context.TestQuery();
+        return View(List<Book> Titles);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
