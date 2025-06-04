@@ -1,5 +1,3 @@
-@Queries List<Book> Titles
-
 @{
     ViewData["Title"] = "Books";
 }
@@ -8,13 +6,14 @@
 <p>Your books will be displayed here</p>
 
 
+@model List<Book>
+
 <ul>
- @foreach (var item in Model)
- {
-    <li>@item</li>
-
-    }
+@foreach (var book in Model)
+{
+     <li>
+         <strong>@book.Title</strong> by @book.Author<br />
+          Total copies: @book.Stock
+           </li>
+}
 </ul>
-
-
-

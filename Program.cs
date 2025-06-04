@@ -1,8 +1,10 @@
+using Bookish.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddDbContext<BookishContext>();
 
 var app = builder.Build();
 
@@ -21,6 +23,8 @@ app.UseRouting();
 // var context = new Query();
 // context.TestQuery();
 
+// var context = new BooksData();
+// context.AddSampleBook();
 
 app.UseAuthorization();
 

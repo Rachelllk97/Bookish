@@ -2,16 +2,19 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Bookish.Models;
 using Bookish.Database;
-
 namespace Bookish.Controllers;
+
+
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
+    private readonly BookishContext _context;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, BookishContext context)
     {
         _logger = logger;
+        _context = context;
     }
 
     public IActionResult Index()
@@ -24,12 +27,23 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult Books()
-    {
-        var context = new Query();
-        context.TestQuery();
-        return View(List<Book> Titles);
-    }
+
+
+public IActionResult Books()
+{
+        var books = _context.Books.ToList();
+
+        Console.WriteLine("Books count: " + _context.Books.Count());
+
+        foreach (var book in books)
+        {
+            Console.WriteLine($"Title: {book.Title}, Author: {book.Author}");
+        }
+
+        return View(books);
+}
+
+
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
