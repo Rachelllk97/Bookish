@@ -42,7 +42,26 @@ public IActionResult Books()
 
         return View(books);
 }
+     public IActionResult AddNewBook()
+    {
+        return View();
+    }
 
+
+
+ [HttpPost]
+ [ValidateAntiForgeryToken]
+  public ActionResult AddNewBook(Book book)
+  {
+
+    if (ModelState.IsValid)
+        {
+     _context.Books.Add(book);
+     _context.SaveChanges();
+    return RedirectToAction("Index"); 
+    }
+     return View(book);
+    }
 
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
