@@ -42,11 +42,10 @@ public IActionResult Books()
 
         return View(books);
 }
-     public IActionResult AddNewBook()
+    public IActionResult AddNewBook()
     {
         return View();
     }
-
 
 
  [HttpPost]
@@ -77,6 +76,30 @@ public IActionResult Books()
             return RedirectToAction("Books");
         }
     return View();
+    }
+
+    [HttpGet]
+    public IActionResult EditBook (int id) 
+    {
+        var book = _context.Books.Find(id);
+        if (book == null)
+        {
+            return NotFound();
+        }
+        return View(book);
+    }
+
+[HttpPost]
+[ValidateAntiForgeryToken]
+    public IActionResult EditBook (Book book)
+    {
+         if (ModelState.IsValid)
+         {
+            _context.Update(book);
+            _context.SaveChanges();
+            return RedirectToAction("Books");
+         }
+         return View(book);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
