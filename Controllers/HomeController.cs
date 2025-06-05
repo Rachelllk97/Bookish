@@ -1,10 +1,9 @@
 using System.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
-using Bookish.Models;
 using Bookish.Database;
+using Bookish.Models;
+using Microsoft.AspNetCore.Mvc;
+
 namespace Bookish.Controllers;
-
-
 
 public class HomeController : Controller
 {
@@ -27,13 +26,11 @@ public class HomeController : Controller
         return View();
     }
 
-
-
-public IActionResult Books()
-{
+    public IActionResult Books()
+    {
         var books = _context.Books.ToList();
-
-        Console.WriteLine("Books count: " + _context.Books.Count());
+        books.Sort((x, y) => x.Title.CompareTo(y.Title));       
+         Console.WriteLine("Books count: " + _context.Books.Count());
 
         foreach (var book in books)
         {
@@ -41,29 +38,28 @@ public IActionResult Books()
         }
 
         return View(books);
-}
+    }
+
     public IActionResult AddNewBook()
     {
         return View();
     }
 
-
- [HttpPost]
- [ValidateAntiForgeryToken]
-  public ActionResult AddNewBook(Book book)
-  {
-
-    if (ModelState.IsValid)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public ActionResult AddNewBook(Book book)
+    {
+        if (ModelState.IsValid)
         {
-     _context.Books.Add(book);
-     _context.SaveChanges();
-    return RedirectToAction("AddNewBook"); 
-    }
-     return View(book);
+            _context.Books.Add(book);
+            _context.SaveChanges();
+            return RedirectToAction("AddNewBook");
+        }
+        return View(book);
     }
 
-[HttpPost]
- [ValidateAntiForgeryToken]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public ActionResult DeleteBook(int id)
     {
         Console.WriteLine($"Received ID: {id}");
@@ -75,11 +71,11 @@ public IActionResult Books()
             _context.SaveChanges();
             return RedirectToAction("Books");
         }
-    return View();
+        return View();
     }
 
     [HttpGet]
-    public IActionResult EditBook (int id) 
+    public IActionResult EditBook(int id)
     {
         var book = _context.Books.Find(id);
         if (book == null)
@@ -89,22 +85,24 @@ public IActionResult Books()
         return View(book);
     }
 
-[HttpPost]
-[ValidateAntiForgeryToken]
-    public IActionResult EditBook (Book book)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult EditBook(Book book)
     {
-         if (ModelState.IsValid)
-         {
+        if (ModelState.IsValid)
+        {
             _context.Update(book);
             _context.SaveChanges();
             return RedirectToAction("Books");
-         }
-         return View(book);
+        }
+        return View(book);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        return View(
+            new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }
+        );
     }
 }
