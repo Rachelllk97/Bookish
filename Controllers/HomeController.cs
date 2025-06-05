@@ -58,11 +58,26 @@ public IActionResult Books()
         {
      _context.Books.Add(book);
      _context.SaveChanges();
-    return RedirectToAction("Index"); 
+    return RedirectToAction("AddNewBook"); 
     }
      return View(book);
     }
 
+[HttpPost]
+ [ValidateAntiForgeryToken]
+    public ActionResult DeleteBook(int id)
+    {
+        Console.WriteLine($"Received ID: {id}");
+        var book = _context.Books.Find(id);
+        if (book != null)
+        {
+            Console.WriteLine("deleting");
+            _context.Books.Remove(book);
+            _context.SaveChanges();
+            return RedirectToAction("Books");
+        }
+    return View();
+    }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
