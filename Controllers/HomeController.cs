@@ -29,8 +29,9 @@ public class HomeController : Controller
     public IActionResult Books()
     {
         var books = _context.Books.ToList();
-        books.Sort((x, y) => x.Title.CompareTo(y.Title));       
-         Console.WriteLine("Books count: " + _context.Books.Count());
+        books.Sort((x, y) => x.Title.CompareTo(y.Title));
+
+        Console.WriteLine("Books count: " + _context.Books.Count());
 
         foreach (var book in books)
         {
@@ -104,5 +105,21 @@ public class HomeController : Controller
         return View(
             new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }
         );
+    }
+    
+
+        public IActionResult Members()
+    {
+        var members = _context.Members.ToList();
+        members.Sort((x, y) => x.Name.CompareTo(y.Name));
+        
+         Console.WriteLine("Members count: " + _context.Books.Count());
+
+        foreach (var member in members)
+        {
+            Console.WriteLine($"Name: {member.Name}");
+        }
+
+        return View(members);
     }
 }

@@ -8,4 +8,6 @@ public class Book
     public string? Author { get; set; }
     public int Stock { get; set; }
     public int Available { get; set; }
+    public List<MemberBook> MemberBooks { get; set; } = new List<MemberBook>();
+
 }

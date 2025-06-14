@@ -1,0 +1,33 @@
+
+
+@{
+    ViewData["Title"] = "Members";
+}
+<h1>@ViewData["Title"]</h1>
+
+<p>Members</p>
+
+
+@model List<Member>
+
+<ul>
+<table border="2">
+    <tr>
+    <th>Name</th>
+    </tr>
+@foreach (var member in Model)
+{   
+<tr>
+    
+    <td>@member.Name</td>
+    @* <td> <form asp-action="DeleteBook" asp-route-id="@member.Id" method="post"> 
+          <button type="submit">Delete</button>
+          <td>
+          <a asp-action="EditBook" asp-route-id="@member.Id">Edit</a>
+          </form></td> *@
+</tr>}
+</table>
+</ul>
+
+
+
