@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Bookish.Database;
 using Bookish.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bookish.Controllers;
 
@@ -110,7 +111,10 @@ public class HomeController : Controller
 
         public IActionResult Members()
     {
-        var members = _context.Members.ToList();
+        var members = _context.Members
+          .Include(m => m.MemberBooks)
+          .ThenInclude(mb => mb.Book)
+          .ToList();
         members.Sort((x, y) => x.Name.CompareTo(y.Name));
         
          Console.WriteLine("Members count: " + _context.Books.Count());
