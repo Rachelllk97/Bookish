@@ -1,0 +1,18 @@
+@model Member
+
+@{
+    ViewData["Title"] = "Member Editor";
+}
+
+<h2>Edit Member</h2>
+
+<form asp-action="EditMember" method="post">
+    <input type="hidden" asp-for="Id" />
+
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <button type="submit">Save</button>
+</form>

@@ -1,34 +1,56 @@
+
 @model List<Member>
+@using System.Linq
 
-@{
-    ViewData["Title"] = "Members";
-}
 
-<h1>@ViewData["Title"]</h1>
+<h2>Members</h2>
 
-<table border="2" cellpadding="10">
-    <thead>
+<table border="1" cellpadding="10">
+     <thead>
         <tr>
-            <th>Member Name</th>
-            <th>Book Title</th>
-            <th>Author</th>
+         <th>Name</th>
+        <th>Currently borrowing</th>
             <th>Date Borrowed</th>
-            <th>Return Due</th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var member in Model)
+              <th>Return due</th>
+            <th>Edit member</th>
+               <th>Delete member</th>
+           </tr>
+        </thead>
+
+
+@foreach (var member in Model)
+{
+    if (member.MemberBooks != null && member.MemberBooks.Any())
     {
         foreach (var memberBook in member.MemberBooks)
         {
             <tr>
                 <td>@member.Name</td>
                 <td>@memberBook.Book.Title</td>
-                <td>@memberBook.Book.Author</td>
                 <td>@memberBook.BorrowedDate.ToString("dd MMM yyyy")</td>
                 <td>@memberBook.BorrowedDate.AddDays(30).ToString("dd MMM yyyy")</td>
+                <td>
+                    <a asp-action="EditMember" asp-route-id="@member.Id">Edit</a>
+                </td>
+                <td>
+                    <a asp-action="DeleteMember" asp-route-id="@member.Id">Delete</a>
+                    </td>
             </tr>
         }
     }
-    </tbody>
-</table>
+    else
+    {
+      
+<tr>
+    <td>@member.Name</td>
+    <td colspan="3">No books borrowed</td>
+     <td>
+        <a asp-action="EditMember" asp-route-id="@member.Id">Edit</a>
+        </td>
+        <td>
+            <a asp-action="DeleteMember" asp-route-id="@member.Id">Delete</a>
+            </td>
+</tr>
+
+    }
+}

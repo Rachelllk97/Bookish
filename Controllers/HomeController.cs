@@ -107,17 +107,16 @@ public class HomeController : Controller
             new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier }
         );
     }
-    
 
-        public IActionResult Members()
+
+    public IActionResult Members()
     {
         var members = _context.Members
           .Include(m => m.MemberBooks)
           .ThenInclude(mb => mb.Book)
           .ToList();
-        members.Sort((x, y) => x.Name.CompareTo(y.Name));
-        
-         Console.WriteLine("Members count: " + _context.Books.Count());
+
+        Console.WriteLine("Members count: " + _context.Books.Count());
 
         foreach (var member in members)
         {
@@ -126,4 +125,35 @@ public class HomeController : Controller
 
         return View(members);
     }
+    
+     [HttpGet]
+    public IActionResult EditMember(int id)
+    {
+        var member = _context.Members.Find(id);
+        if (member == null)
+        {
+            return NotFound();
+        }
+        return View(member);
+    }
+
+[HttpPost]
+public IActionResult EditMember(Member member)
+{
+    if (ModelState.IsValid)
+    {
+        var existingMember = _context.Members.Find(member.Id);
+        if (existingMember == null)
+        {
+            return NotFound();
+        }
+
+        existingMember.Name = member.Name;
+
+        _context.SaveChanges();
+        return RedirectToAction("Members");
+    }
+    return View(member);
+}
+
 }
