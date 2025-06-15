@@ -1,56 +1,72 @@
-
 @model List<Member>
 @using System.Linq
 
-
 <h2>Members</h2>
 
-<table border="1" cellpadding="10">
-     <thead>
+<style>
+    .member-separator td {
+        border-bottom: 2px solid black;
+    }
+</style>
+
+<table border="1" cellpadding="10" style="border-collapse: collapse; width: 100%;">
+    <thead>
         <tr>
-         <th>Name</th>
-        <th>Currently borrowing</th>
+            <th>Name</th>
+            <th>Book Title</th>
+            <th>Author</th>
             <th>Date Borrowed</th>
-              <th>Return due</th>
-            <th>Edit member</th>
-               <th>Delete member</th>
-           </tr>
-        </thead>
-
-
-@foreach (var member in Model)
-{
-    if (member.MemberBooks != null && member.MemberBooks.Any())
+            <th>Return Due</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var member in Model)
     {
-        foreach (var memberBook in member.MemberBooks)
+        if (member.MemberBooks != null && member.MemberBooks.Count > 0)
         {
-            <tr>
+            bool firstRow = true;
+            int bookCount = member.MemberBooks.Count;
+            int currentIndex = 0;
+
+            foreach (var memberBook in member.MemberBooks)
+            {
+                currentIndex++;
+                bool isLast = currentIndex == bookCount;
+
+                <tr class="@(isLast ? "member-separator" : "")">
+                    @if (firstRow)
+                    {
+                        <td rowspan="@bookCount">@member.Name</td>
+                        firstRow = false;
+                    }
+                    <td>@memberBook.Book.Title</td>
+                    <td>@memberBook.Book.Author</td>
+                    <td>@memberBook.BorrowedDate.ToString("dd MMM yyyy")</td>
+                    <td>@memberBook.BorrowedDate.AddDays(30).ToString("dd MMM yyyy")</td>
+                    <td>
+                        <a asp-action="EditMember" asp-route-id="@member.Id">Edit</a>
+                    </td>
+                    <td>
+                        <a asp-action="DeleteMember" asp-route-id="@member.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr class="member-separator">
                 <td>@member.Name</td>
-                <td>@memberBook.Book.Title</td>
-                <td>@memberBook.BorrowedDate.ToString("dd MMM yyyy")</td>
-                <td>@memberBook.BorrowedDate.AddDays(30).ToString("dd MMM yyyy")</td>
+                <td colspan="4">No books borrowed</td>
                 <td>
                     <a asp-action="EditMember" asp-route-id="@member.Id">Edit</a>
                 </td>
                 <td>
                     <a asp-action="DeleteMember" asp-route-id="@member.Id">Delete</a>
-                    </td>
+                </td>
             </tr>
         }
     }
-    else
-    {
-      
-<tr>
-    <td>@member.Name</td>
-    <td colspan="3">No books borrowed</td>
-     <td>
-        <a asp-action="EditMember" asp-route-id="@member.Id">Edit</a>
-        </td>
-        <td>
-            <a asp-action="DeleteMember" asp-route-id="@member.Id">Delete</a>
-            </td>
-</tr>
-
-    }
-}
+    </tbody>
+</table>
