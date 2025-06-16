@@ -108,7 +108,7 @@ public class HomeController : Controller
         );
     }
 
-
+    [HttpGet]
     public IActionResult Members()
     {
         var members = _context.Members
@@ -125,8 +125,8 @@ public class HomeController : Controller
 
         return View(members);
     }
-    
-     [HttpGet]
+
+    [HttpGet]
     public IActionResult EditMember(int id)
     {
         var member = _context.Members.Find(id);
@@ -137,23 +137,48 @@ public class HomeController : Controller
         return View(member);
     }
 
-[HttpPost]
-public IActionResult EditMember(Member member)
-{
-    if (ModelState.IsValid)
+    [HttpPost]
+    public IActionResult EditMember(Member member)
     {
-        var existingMember = _context.Members.Find(member.Id);
-        if (existingMember == null)
+        if (ModelState.IsValid)
         {
-            return NotFound();
+            var existingMember = _context.Members.Find(member.Id);
+            if (existingMember == null)
+            {
+                return NotFound();
+            }
+
+            existingMember.Name = member.Name;
+
+            _context.SaveChanges();
+            return RedirectToAction("Members");
         }
-
-        existingMember.Name = member.Name;
-
-        _context.SaveChanges();
-        return RedirectToAction("Members");
+        return View(member);
     }
-    return View(member);
-}
+
+
+    [HttpPost]
+    public ActionResult DeleteMember(int id)
+    {
+        Console.WriteLine("the id is", id);
+        var member = _context.Members.Find(id);
+
+        //  .Include(m => m.MemberBooks)
+        //  .FirstOrDefault(m => m.Id == id);
+
+        // if (member == null)
+        // {
+        //     return NotFound();
+        // }
+
+        // _context.MemberBooks.RemoveRange(member.MemberBooks);
+
+        _context.Members.Remove(member);
+        _context.SaveChanges();
+
+     return View();
+        // return RedirectToAction("Members");
+    }
+
 
 }
