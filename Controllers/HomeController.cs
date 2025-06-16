@@ -126,35 +126,65 @@ public class HomeController : Controller
         return View(members);
     }
 
-    [HttpGet]
-    public IActionResult EditMember(int id)
+[HttpGet]
+public IActionResult EditMember(int id)
+{
+    var member = _context.Members
+        .Include(m => m.MemberBooks)
+        .ThenInclude(mb => mb.Book)
+        .FirstOrDefault(m => m.Id == id);
+
+    if (member == null)
     {
-        var member = _context.Members.Find(id);
-        if (member == null)
+        return NotFound();
+    }
+
+    ViewBag.Books = _context.Books.ToList(); 
+    return View(member);
+}
+
+
+ [HttpPost]
+public IActionResult EditMember(Member member, int? SelectedBookId)
+{
+    if (ModelState.IsValid)
+    {
+        var existingMember = _context.Members
+            .Include(m => m.MemberBooks)
+            .FirstOrDefault(m => m.Id == member.Id);
+
+        if (existingMember == null)
         {
             return NotFound();
         }
-        return View(member);
-    }
 
-    [HttpPost]
-    public IActionResult EditMember(Member member)
-    {
-        if (ModelState.IsValid)
+        existingMember.Name = member.Name;
+
+        if (SelectedBookId.HasValue)
         {
-            var existingMember = _context.Members.Find(member.Id);
-            if (existingMember == null)
+            var book = _context.Books.Find(SelectedBookId.Value);
+            if (book != null)
             {
-                return NotFound();
+                var newMemberBook = new MemberBook
+                {
+                    MemberId = existingMember.Id,
+                    Member = existingMember,
+                    BookId = book.Id,
+                    Book = book,
+                    BorrowedDate = DateTime.UtcNow
+                };
+                _context.MemberBooks.Add(newMemberBook);
             }
-
-            existingMember.Name = member.Name;
-
-            _context.SaveChanges();
-            return RedirectToAction("Members");
         }
-        return View(member);
+
+        _context.SaveChanges();
+        return RedirectToAction("Members");
     }
+
+    ViewBag.Books = _context.Books.ToList(); 
+    return View(member);
+}
+
 
 
     [HttpPost]

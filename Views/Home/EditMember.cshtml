@@ -1,7 +1,7 @@
 @model Member
-
 @{
     ViewData["Title"] = "Member Editor";
+    var books = ViewBag.Books as List<Book>;
 }
 
 <h2>Edit Member</h2>
@@ -12,6 +12,17 @@
     <div>
         <label asp-for="Name"></label>
         <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div>
+        <label>Select a book to assign:</label>
+        <select name="SelectedBookId" class="form-control">
+            <option value="">-- Select a book --</option>
+            @foreach (var book in books)
+            {
+                <option value="@book.Id">@book.Title by @book.Author</option>
+            }
+        </select>
     </div>
 
     <button type="submit">Save</button>
