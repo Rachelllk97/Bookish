@@ -49,7 +49,7 @@
                         <a asp-action="EditMember" asp-route-id="@member.Id">Edit</a>
                     </td>
                     <td>
-                       <a asp-action="DeleteMember" asp-route-id="@member.Id" method="post">Delete</a>
+                       <a asp-action="DeleteMember" asp-route-id="@member.Id" method="delete">Delete</a>
                     </td>
                 </tr>
             }
@@ -63,7 +63,7 @@
                     <a asp-action="EditMember" asp-route-id="@member.Id">Edit</a>
                 </td>
                 <td>
-                    <a asp-action="DeleteMember" asp-route-id="@member.Id" method="post">Delete</a>
+                    <a asp-action="DeleteMember" asp-route-id="@member.Id" method="delete">Delete</a>
                 </td>
             </tr>
         }

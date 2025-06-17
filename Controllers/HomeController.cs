@@ -144,7 +144,7 @@ public IActionResult EditMember(int id)
 }
 
 
- [HttpPost]
+[HttpPost]
 public IActionResult EditMember(Member member, int? SelectedBookId)
 {
     if (ModelState.IsValid)
@@ -163,7 +163,7 @@ public IActionResult EditMember(Member member, int? SelectedBookId)
         if (SelectedBookId.HasValue)
         {
             var book = _context.Books.Find(SelectedBookId.Value);
-            if (book != null)
+            if (book != null && book.Available > 0)
             {
                 var newMemberBook = new MemberBook
                 {
@@ -173,7 +173,14 @@ public IActionResult EditMember(Member member, int? SelectedBookId)
                     Book = book,
                     BorrowedDate = DateTime.UtcNow
                 };
+
                 _context.MemberBooks.Add(newMemberBook);
+                book.Available -= 1;
+            }
+            else
+            {
+                ViewBag.Books = _context.Books.ToList();
+                return View(member);
             }
         }
 
@@ -181,13 +188,14 @@ public IActionResult EditMember(Member member, int? SelectedBookId)
         return RedirectToAction("Members");
     }
 
-    ViewBag.Books = _context.Books.ToList(); 
+    ViewBag.Books = _context.Books.ToList();
     return View(member);
 }
 
 
 
-    [HttpPost]
+
+    [HttpDelete]
     public ActionResult DeleteMember(int id)
     {
         Console.WriteLine("the id is", id);
